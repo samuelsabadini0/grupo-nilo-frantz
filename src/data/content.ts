@@ -22,7 +22,6 @@ export const post = {
   readTime: '8 min',
   cover: '/img/mae-bebe.webp',
   reviewer: 'Claudia Rachewsky - CRP 07/14.029',
-  published: 'Publicado em 18 de setembro, 2026',
   intro: [
     'O papel da psicologia na barriga solidária é um dos aspectos importantes desse processo, que envolve muito mais do que questões médicas e jurídicas. Por trás dos exames, contratos e procedimentos, existem expectativas, dúvidas e emoções compartilhadas pelos futuros pais e pela mulher que se dispõe a gestar o bebê por amor e generosidade.',
     'A decisão de participar de uma gestação por substituição é vivida de maneira diferente por cada pessoa. Enquanto os futuros pais alimentam o sonho de construir ou ampliar a família, a mulher que tornará essa gravidez possível também passa por dúvidas e decisões importantes. Nesse contexto, o acompanhamento psicológico ajuda cada participante a compreender sua participação, refletir sobre suas motivações e se preparar para as diferentes etapas do tratamento.',

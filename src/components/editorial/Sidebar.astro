@@ -1,0 +1,28 @@
+---
+// Barra lateral fixa dos blogs: busca e cadastro de newsletter.
+// Em páginas com lista de artigos a busca filtra na hora; no post ela abre a home do blog já filtrada.
+import Icon from '../Icon.astro';
+import type { Brand } from '../../data/brands';
+interface Props { brand: Brand; search?: boolean; news?: boolean }
+const { brand, search = true, news = true } = Astro.props;
+---
+<div class="ed-side">
+  {search && (
+    <form class="ed-side__search" action={brand.base} method="get" role="search" data-search-form>
+      <input type="search" name="q" data-ed-search placeholder="Buscar artigos" aria-label="Buscar artigos por assunto ou categoria" />
+      <button type="submit" aria-label="Buscar"><Icon name="search" size={18} /></button>
+    </form>
+  )}
+  {news && (
+    <div class="ed-side__news" id="newsletter">
+      <p class="ed-side__eyebrow">Newsletter</p>
+      <h3>Receba nossas novidades</h3>
+      <p>Inscreva-se para receber os novos artigos no seu e-mail.</p>
+      <form data-newsletter>
+        <input type="email" name="email" placeholder="Seu e-mail" aria-label="E-mail" required />
+        <button type="submit">Inscrever-se</button>
+        <small>Ao se inscrever, você concorda com nossa <a href="#">Política de Privacidade</a>.</small>
+      </form>
+    </div>
+  )}
+</div>

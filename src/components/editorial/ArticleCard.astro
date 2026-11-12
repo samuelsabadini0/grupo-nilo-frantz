@@ -1,4 +1,5 @@
 ---
+import Icon from '../Icon.astro';
 import type { Article } from '../../data/articles';
 import type { Brand } from '../../data/brands';
 import { cardLabel, postHref } from '../../data/blog';
@@ -8,8 +9,13 @@ const { article, brand, delay = 0 } = Astro.props;
 <article class="ed-card reveal" data-ed-card style={`--d:${delay}s`}>
   <a href={postHref(article)}>
     <div class="media"><img src={article.image} alt="" loading="lazy" /></div>
-    <div class="ed-card__meta"><b>{cardLabel(brand, article)}</b><i></i>{article.time} de leitura</div>
+    <span class="ed-tag">{cardLabel(brand, article)}</span>
     <h3>{article.title}</h3>
     <p>{article.excerpt}</p>
+    <div class="ed-card__meta">
+      <span><Icon name="user" size={15} />{article.author}</span>
+      <span><Icon name="calendar" size={15} /><time>{article.published}</time></span>
+    </div>
+    <span class="ed-card__more">Saiba mais <Icon name="chevron" size={14} /></span>
   </a>
 </article>

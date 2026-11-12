@@ -115,11 +115,15 @@ if (dialog) {
   dialog.addEventListener('close', () => { dialog.querySelector('iframe')?.removeAttribute('src'); });
 }
 
-$$('[data-search-form]').forEach((f) => f.addEventListener('submit', (e) => e.preventDefault()));
+// Busca da barra lateral: com lista na página filtra na hora; sem lista (post) abre a home do blog filtrada
+$$<HTMLFormElement>('[data-search-form]').forEach((f) => f.addEventListener('submit', (e) => {
+  if (f.closest('[data-ed-list]')) e.preventDefault();
+}));
 
 // Busca nos artigos do novo blog
 $$<HTMLInputElement>('[data-ed-search]').forEach((input) => {
-  const scope = input.closest('[data-ed-list]')!;
+  const scope = input.closest('[data-ed-list]');
+  if (!scope) return;
   const cards = $$('[data-ed-card]', scope);
   const empty = scope.querySelector<HTMLElement>('[data-ed-empty]');
   input.addEventListener('input', () => {
@@ -133,6 +137,15 @@ $$<HTMLInputElement>('[data-ed-search]').forEach((input) => {
     });
     if (empty) empty.hidden = shown > 0;
   });
+  // Vindo da busca do post (?q=), já abre filtrado e rola até a lista
+  const fromUrl = new URLSearchParams(location.search).get('q');
+  if (fromUrl) {
+    input.value = fromUrl;
+    input.dispatchEvent(new Event('input'));
+    const goToList = () => setTimeout(() => scope.scrollIntoView({ block: 'start', behavior: 'instant' }), 0);
+    if (document.readyState === 'complete') goToList();
+    else addEventListener('load', goToList, { once: true });
+  }
 });
 
 // Barra de leitura do post

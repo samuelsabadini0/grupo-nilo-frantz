@@ -1,9 +1,8 @@
 ---
 import Editorial from '../../layouts/Editorial.astro';
-import Icon from '../Icon.astro';
 import Pager from '../Pager.astro';
 import ArticleCard from './ArticleCard.astro';
-import Newsletter from './Newsletter.astro';
+import Sidebar from './Sidebar.astro';
 import { blogArticles, exploreLinks } from '../../data/blog';
 import type { Brand } from '../../data/brands';
 
@@ -27,23 +26,20 @@ const list = blogArticles(brand).filter((a) => a.category === category.slug);
     </div>
   </section>
 
-  <section class="wrap ed-section" data-ed-list style="margin-top:96px">
-    <div class="ed-section__head">
-      <div>
-        <p class="ed-eyebrow">{list.length} {list.length === 1 ? 'artigo' : 'artigos'}</p>
-        <h2 class="ed-title">Artigos sobre {category.name.toLowerCase()}</h2>
+  <section class="wrap ed-section ed-withside" data-ed-list style="margin-top:96px">
+    <div>
+      <div class="ed-section__head">
+        <div>
+          <p class="ed-eyebrow">{list.length} {list.length === 1 ? 'artigo' : 'artigos'}</p>
+          <h2 class="ed-title">Artigos sobre {category.name.toLowerCase()}</h2>
+        </div>
       </div>
-      <form class="ed-search" data-search-form role="search">
-        <input type="search" data-ed-search placeholder="Buscar nesta categoria" aria-label="Buscar nesta categoria" />
-        <Icon name="search" size={18} />
-      </form>
+      <div class="ed-grid ed-grid--2">
+        {list.map((a, i) => <ArticleCard article={a} brand={brand} delay={(i % 2) * 0.08} />)}
+      </div>
+      <p class="ed-empty" data-ed-empty hidden>Nenhum artigo encontrado para essa busca.</p>
+      {list.length > 9 && <Pager />}
     </div>
-    <div class="ed-grid">
-      {list.map((a, i) => <ArticleCard article={a} brand={brand} delay={(i % 3) * 0.08} />)}
-    </div>
-    <p class="ed-empty" data-ed-empty hidden>Nenhum artigo encontrado para essa busca.</p>
-    {list.length > 9 && <Pager />}
+    <aside><Sidebar brand={brand} /></aside>
   </section>
-
-  <Newsletter />
 </Editorial>

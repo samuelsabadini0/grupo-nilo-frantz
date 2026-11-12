@@ -3,7 +3,7 @@ import Editorial from '../../layouts/Editorial.astro';
 import Icon from '../Icon.astro';
 import Pager from '../Pager.astro';
 import ArticleCard from './ArticleCard.astro';
-import Newsletter from './Newsletter.astro';
+import Sidebar from './Sidebar.astro';
 import TypeBadge from './TypeBadge.astro';
 import { articlesOf, materials } from '../../data/articles';
 import { brands, type Brand } from '../../data/brands';
@@ -129,23 +129,20 @@ const themes = group
     </div>
   </section>
 
-  <section class="wrap ed-section" id="artigos" data-ed-list>
-    <div class="ed-section__head reveal">
-      <div>
-        <p class="ed-eyebrow">Biblioteca</p>
-        <h2 class="ed-title">Todos os artigos</h2>
+  <section class="wrap ed-section ed-withside" id="artigos" data-ed-list>
+    <div>
+      <div class="ed-section__head reveal">
+        <div>
+          <p class="ed-eyebrow">Biblioteca</p>
+          <h2 class="ed-title">Todos os artigos</h2>
+        </div>
       </div>
-      <form class="ed-search" data-search-form role="search">
-        <input type="search" data-ed-search placeholder="Buscar por assunto" aria-label="Buscar por assunto" />
-        <Icon name="search" size={18} />
-      </form>
+      <div class="ed-grid ed-grid--2">
+        {library.map((a, i) => <ArticleCard article={a} brand={brand} delay={(i % 2) * 0.08} />)}
+      </div>
+      <p class="ed-empty" data-ed-empty hidden>Nenhum artigo encontrado para essa busca.</p>
+      {rest.length > 9 && <Pager />}
     </div>
-    <div class="ed-grid">
-      {library.map((a, i) => <ArticleCard article={a} brand={brand} delay={(i % 3) * 0.08} />)}
-    </div>
-    <p class="ed-empty" data-ed-empty hidden>Nenhum artigo encontrado para essa busca.</p>
-    {rest.length > 9 && <Pager />}
+    <aside><Sidebar brand={brand} /></aside>
   </section>
-
-  <Newsletter />
 </Editorial>

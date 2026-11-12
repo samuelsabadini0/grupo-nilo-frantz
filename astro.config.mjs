@@ -14,7 +14,7 @@ const prefixLinks = () => ({
     'astro:build:done': ({ dir }) => {
       if (!PAGES_BASE) return;
       const escaped = PAGES_BASE.slice(1).replace(/[-/]/g, '\\$&');
-      const pattern = new RegExp(`(href|src|srcset)="/(?!/|${escaped}/)`, 'g');
+      const pattern = new RegExp(`(href|src|srcset|action)="/(?!/|${escaped}/)`, 'g');
       const walk = (folder) => {
         for (const entry of fs.readdirSync(folder, { withFileTypes: true })) {
           const file = path.join(folder, entry.name);

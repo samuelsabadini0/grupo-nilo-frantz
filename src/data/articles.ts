@@ -10,13 +10,37 @@ export interface Article {
   category: string;
   time: string;
   image: string;
+  /** Autor e datas (dd/mm/aaaa) são provisórios: preenchidos abaixo a partir da ordem da lista */
+  author: string;
+  published: string;
+  updated: string;
 }
+
+const authors: Record<Article['brand'], string> = {
+  nilo: 'Equipe Nilo Frantz',
+  enne: 'Equipe Enne',
+  ife: 'Equipe IFE',
+};
 
 const a = (brand: Article['brand'], category: string, title: string, excerpt: string, image: string, time = '5 min'): Article => ({
   brand, category, title, excerpt, time, image: `/img/${image}.webp`,
+  author: authors[brand], published: '', updated: '',
 });
 
-export const articles: Article[] = [
+/** Datas de exemplo: os artigos de cada marca ficam espaçados em uma semana, do mais recente ao mais antigo. */
+const stamp = (list: Article[]) => {
+  const count: Record<string, number> = {};
+  for (const item of list) {
+    const n = (count[item.brand] = (count[item.brand] ?? -1) + 1);
+    const d = new Date(Date.UTC(2026, 9, 19 - n * 7));
+    const fmt = d.toISOString().slice(0, 10).split('-').reverse().join('/');
+    item.published = fmt;
+    item.updated = fmt;
+  }
+  return list;
+};
+
+export const articles: Article[] = stamp([
   // Nilo Frantz: reprodução humana completa
   a('nilo', 'barriga-solidaria', 'Barriga solidária psicologia: por que o acompanhamento emocional é essencial', 'O papel do acompanhamento psicológico na gestação por substituição e sua importância para todos os envolvidos.', 'mae-bebe', '8 min'),
   a('nilo', 'fiv', 'Método ROPA: como funciona a maternidade compartilhada', 'As etapas, as taxas de sucesso e os cuidados do método de maternidade compartilhada.', 'pes-maos'),
@@ -44,7 +68,7 @@ export const articles: Article[] = [
   a('ife', 'ovodoacao', 'Critérios para ser uma doadora de óvulos', 'Ser doadora exige mais do que disposição: conheça os requisitos e os cuidados envolvidos.', 'dna'),
   a('ife', 'ovodoacao', 'Doação de óvulos: quem é a mãe?', 'Uma das dúvidas mais sensíveis sobre o tema, explicada com clareza.', 'mae-bebe'),
   a('ife', 'ovodoacao', 'Filhos de ovodoação: vínculo e identidade', 'Como a escolha pela ovodoação pode influenciar o vínculo e a identidade da família.', 'pes-bebe'),
-];
+]);
 
 /** Artigos de uma marca; sem marca, todos (blog geral do Grupo). O primeiro é o destaque. */
 export const articlesOf = (brand?: Article['brand']) => (brand ? articles.filter((x) => x.brand === brand) : articles);

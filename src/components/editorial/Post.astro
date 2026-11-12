@@ -1,7 +1,8 @@
 ---
 import Editorial from '../../layouts/Editorial.astro';
+import Icon from '../Icon.astro';
 import ArticleCard from './ArticleCard.astro';
-import Newsletter from './Newsletter.astro';
+import Sidebar from './Sidebar.astro';
 import { post } from '../../data/content';
 import { articles } from '../../data/articles';
 import { blogArticles, categoryHref, categoryName } from '../../data/blog';
@@ -20,9 +21,15 @@ const related = blogArticles(brand).filter((a) => a !== article).slice(0, 3);
     <img class="ed-hero__img" src={post.cover} alt="" fetchpriority="high" />
     <div class="ed-hero__in">
       <div class="ed-crumbs"><a href={brand.base}>Blog</a>{category && <><span>/</span><a href={categoryHref(brand, article.category)}>{category}</a></>}</div>
-      <p class="ed-eyebrow ed-eyebrow--light">{category && `${category} · `}{post.readTime} de leitura</p>
+      {category && <a class="ed-tag ed-tag--light" href={categoryHref(brand, article.category)}>{category}</a>}
       <h1>{post.title}</h1>
-      <p class="ed-hero__by">{post.published}</p>
+      <h2 class="ed-hero__sub">{article.excerpt}</h2>
+      <ul class="ed-hero__meta">
+        <li><Icon name="user" size={16} />{article.author}</li>
+        <li title="Publicado em"><Icon name="calendar" size={16} /><time>{article.published}</time></li>
+        <li title="Atualizado em"><Icon name="refresh" size={16} /><time>{article.updated}</time></li>
+        <li><Icon name="clock" size={16} />{post.readTime} de leitura</li>
+      </ul>
     </div>
   </section>
 
@@ -37,10 +44,7 @@ const related = blogArticles(brand).filter((a) => a !== article).slice(0, 3);
       ))}
     </article>
     <aside class="ed-aside">
-      <nav class="ed-toc" aria-label="Sumário" data-ed-toc>
-        <strong>Sumário</strong>
-        <ol>{post.sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ol>
-      </nav>
+      <Sidebar brand={brand} news={false} />
       <div class="ed-review">
         <small>Revisado por</small>
         <div class="ed-review__who">
@@ -48,6 +52,13 @@ const related = blogArticles(brand).filter((a) => a !== article).slice(0, 3);
           <strong>{post.reviewer}</strong>
         </div>
         <a class="btn" href="#consulta">Agende sua consulta</a>
+      </div>
+      <div class="ed-aside__sticky">
+        <nav class="ed-toc" aria-label="Sumário" data-ed-toc>
+          <strong>Sumário</strong>
+          <ol>{post.sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ol>
+        </nav>
+        <Sidebar brand={brand} search={false} />
       </div>
     </aside>
   </div>
@@ -59,6 +70,4 @@ const related = blogArticles(brand).filter((a) => a !== article).slice(0, 3);
       {related.map((a, i) => <ArticleCard article={a} brand={brand} delay={i * 0.08} />)}
     </div>
   </section>
-
-  <Newsletter />
 </Editorial>
