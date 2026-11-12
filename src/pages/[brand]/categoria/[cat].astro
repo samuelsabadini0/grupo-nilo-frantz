@@ -1,0 +1,15 @@
+---
+import Category from '../../../components/editorial/Category.astro';
+import { subBrands, type Brand } from '../../../data/brands';
+
+export const getStaticPaths = () =>
+  subBrands.flatMap((brand) =>
+    brand.categories.map((category) => ({
+      params: { brand: brand.base.replaceAll('/', ''), cat: category.slug },
+      props: { brand, category },
+    })),
+  );
+
+const { brand, category } = Astro.props as { brand: Brand; category: { slug: string; name: string } };
+---
+<Category brand={brand} category={category} />

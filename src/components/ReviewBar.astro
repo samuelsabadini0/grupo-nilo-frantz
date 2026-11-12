@@ -1,0 +1,61 @@
+---
+// Barra só para o cliente navegar entre as páginas durante a revisão.
+// Para publicar o site, desligue em src/layouts/Base.astro (SHOW_REVIEW_BAR = false).
+import { POST_SLUG } from '../data/content';
+
+// Remove a subpasta do GitHub Pages para comparar com os links da barra
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const path = Astro.url.pathname.slice(base.length).replace(/\/?$/, '/');
+const groups = [
+  { label: 'Grupo', links: [{ label: 'Site do Grupo', href: '/' }] },
+  {
+    label: 'Blogs',
+    links: [
+      { label: 'Blog geral', href: '/blog/' },
+      { label: 'Nilo Frantz', href: '/nilo-frantz/' },
+      { label: 'Enne', href: '/enne/' },
+      { label: 'IFE', href: '/ife/' },
+    ],
+  },
+  { label: 'Exemplos', links: [{ label: 'Página de post', href: `/nilo-frantz/${POST_SLUG}/` }] },
+];
+const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href);
+---
+<div class="review-bar" role="navigation" aria-label="Navegação de revisão">
+  <div class="review-bar__in">
+    <p class="review-bar__note"><span aria-hidden="true"></span>Navegação para revisão. Não fará parte do site.</p>
+    <div class="review-bar__links">
+      {groups.map((g) => (
+        <div class="review-bar__group">
+          <b>{g.label}</b>
+          {g.links.map((l) => <a href={l.href} aria-current={isCurrent(l.href) ? 'page' : undefined}>{l.label}</a>)}
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<style is:global>
+  :root { --rb: 44px; }
+  body { padding-top: var(--rb); }
+  .review-bar { position: fixed; inset: 0 0 auto; z-index: 100; height: var(--rb); background: #111; color: rgba(255, 255, 255, .72); font: 400 12px/1 'Poppins', system-ui, sans-serif; letter-spacing: .01em; }
+  .review-bar__in { display: flex; align-items: center; gap: 32px; height: 100%; padding: 0 24px; overflow-x: auto; scrollbar-width: none; }
+  .review-bar__in::-webkit-scrollbar { display: none; }
+  .review-bar__note { display: flex; align-items: center; gap: 8px; flex: none; margin: 0; color: #fff; white-space: nowrap; }
+  .review-bar__note span { width: 7px; height: 7px; border-radius: 50%; background: #f5b400; }
+  .review-bar__links { display: flex; align-items: center; gap: 28px; margin-left: auto; }
+  .review-bar__group { display: flex; align-items: center; gap: 4px; flex: none; }
+  .review-bar__group b { margin-right: 6px; font-weight: 500; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: rgba(255, 255, 255, .45); }
+  .review-bar a { padding: 7px 10px; border-radius: 800px; white-space: nowrap; transition: background .2s, color .2s; }
+  .review-bar a:hover { background: rgba(255, 255, 255, .1); color: #fff; }
+  .review-bar a[aria-current] { background: #fff; color: #111; }
+  @media (max-width: 1000px) { .review-bar__links { margin-left: 0; } }
+  @media (max-width: 760px) {
+    :root { --rb: 76px; }
+    .review-bar__in { flex-direction: column; align-items: stretch; justify-content: center; gap: 6px; padding: 0; overflow: visible; }
+    .review-bar__note { padding: 0 16px; font-size: 11px; }
+    .review-bar__links { gap: 18px; padding: 0 16px; overflow-x: auto; scrollbar-width: none; }
+    .review-bar__links::-webkit-scrollbar { display: none; }
+    .review-bar a { padding: 6px 9px; }
+  }
+</style>

@@ -1,0 +1,49 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import Icon from '../Icon.astro';
+import Pager from '../Pager.astro';
+import ArticleCard from './ArticleCard.astro';
+import Newsletter from './Newsletter.astro';
+import { blogArticles, exploreLinks } from '../../data/blog';
+import type { Brand } from '../../data/brands';
+
+interface Props { brand: Brand; category: { slug: string; name: string } }
+const { brand, category } = Astro.props;
+const list = blogArticles(brand).filter((a) => a.category === category.slug);
+---
+<Editorial brand={brand} title={`${category.name} | ${brand.blogTitle}`} heroSrc={brand.hero.src}>
+  <section class="ed-hero ed-hero--page ed-hero--art">
+    <img class="ed-hero__img" src={brand.hero.src} alt="" fetchpriority="high" />
+    <div class="ed-hero__in">
+      <div class="ed-crumbs"><a href={brand.base}>Blog</a><span>/</span><span>{category.name}</span></div>
+      <p class="ed-eyebrow ed-eyebrow--light">Categoria</p>
+      <h1>{category.name}</h1>
+    </div>
+    <div class="ed-hero__bar">
+      <nav aria-label="Categorias">
+        <span>Explorar</span>
+        {exploreLinks(brand).map((l) => <a href={l.href} aria-current={l.slug === category.slug ? 'page' : undefined}>{l.label}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="wrap ed-section" data-ed-list style="margin-top:96px">
+    <div class="ed-section__head">
+      <div>
+        <p class="ed-eyebrow">{list.length} {list.length === 1 ? 'artigo' : 'artigos'}</p>
+        <h2 class="ed-title">Artigos sobre {category.name.toLowerCase()}</h2>
+      </div>
+      <form class="ed-search" data-search-form role="search">
+        <input type="search" data-ed-search placeholder="Buscar nesta categoria" aria-label="Buscar nesta categoria" />
+        <Icon name="search" size={18} />
+      </form>
+    </div>
+    <div class="ed-grid">
+      {list.map((a, i) => <ArticleCard article={a} brand={brand} delay={(i % 3) * 0.08} />)}
+    </div>
+    <p class="ed-empty" data-ed-empty hidden>Nenhum artigo encontrado para essa busca.</p>
+    {list.length > 9 && <Pager />}
+  </section>
+
+  <Newsletter />
+</Editorial>

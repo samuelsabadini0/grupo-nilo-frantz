@@ -1,0 +1,47 @@
+---
+import Base from './Base.astro';
+import Icon from '../components/Icon.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { brandList, type Brand } from '../data/brands';
+import '../styles/editorial.css';
+
+interface Props { brand: Brand; title: string; description?: string; cta?: boolean; heroSrc: string }
+const { brand, title, description, cta = true, heroSrc } = Astro.props;
+// O bloco de consulta usa a outra foto em alta, para não repetir a do hero.
+const ctaImage = heroSrc.includes('mae-bebe')
+  ? { src: '/img/embriao-hero.webp', filter: brand.photoFilter }
+  : { src: '/img/mae-bebe.webp', filter: undefined };
+const links = [
+  { label: 'Artigos', href: `${brand.base}#artigos` },
+  { label: 'Temas', href: `${brand.base}#temas` },
+  { label: 'Materiais', href: `${brand.base}#materiais` },
+  { label: 'Newsletter', href: `${brand.base}#newsletter` },
+];
+---
+<Base brand={brand} title={title} description={description}>
+  <Header brand={brand} overlay links={links}>
+    <a slot="end" class="menu__cta" href="#consulta">Agende sua consulta</a>
+  </Header>
+  <main class="ed">
+    <slot />
+    {cta && (
+      <section class="ed-cta" id="consulta">
+        <img src={ctaImage.src} alt="" loading="lazy" style={ctaImage.filter && `filter:${ctaImage.filter}`} />
+        <div class="reveal">
+          <p class="ed-eyebrow ed-eyebrow--light">Transformando sonhos em realidade</p>
+          <h2>Agende sua consulta</h2>
+          <p>Dê o primeiro passo em direção ao seu sonho. Fale conosco e agende uma consulta com um de nossos especialistas.</p>
+          <a class="ed-pill" href="#">Agende sua consulta <Icon name="arrow" size={18} /></a>
+        </div>
+      </section>
+    )}
+  </main>
+  <div class="ed-blogs">
+    <nav aria-label="Blogs do grupo">
+      <b>Blogs do grupo</b>
+      {brandList.map((b) => <a href={b.base} aria-current={b.id === brand.id ? 'page' : undefined}>{b.tab}</a>)}
+    </nav>
+  </div>
+  <Footer brand={brand} />
+</Base>

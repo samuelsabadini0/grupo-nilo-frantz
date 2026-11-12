@@ -1,0 +1,16 @@
+---
+import Icon from '../Icon.astro';
+---
+<section class="wrap ed-news reveal" id="newsletter">
+  <div>
+    <p class="ed-eyebrow">Newsletter</p>
+    <h2 class="ed-title">Receba nossas novidades</h2>
+    <p>Inscreva-se em nossa Newsletter para receber atualizações.</p>
+  </div>
+  <form data-newsletter>
+    <input type="text" name="nome" placeholder="Nome" aria-label="Nome" required />
+    <input type="email" name="email" placeholder="E-mail" aria-label="E-mail" required />
+    <button type="submit">Inscrever-se <Icon name="arrow" size={16} /></button>
+    <small>Ao se inscrever, você concorda com nossa <a href="#">Política de Privacidade</a></small>
+  </form>
+</section>

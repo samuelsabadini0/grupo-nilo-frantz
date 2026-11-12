@@ -1,0 +1,151 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import Icon from '../Icon.astro';
+import Pager from '../Pager.astro';
+import ArticleCard from './ArticleCard.astro';
+import Newsletter from './Newsletter.astro';
+import TypeBadge from './TypeBadge.astro';
+import { articlesOf, materials } from '../../data/articles';
+import { brands, type Brand } from '../../data/brands';
+import { blogArticles, cardLabel, categoryHref, exploreLinks, isGroup, postHref } from '../../data/blog';
+
+interface Props { brand: Brand }
+const { brand } = Astro.props;
+const group = isGroup(brand);
+const list = blogArticles(brand);
+const [featured, ...rest] = list;
+const href = postHref(featured);
+// No blog geral, os recentes alternam entre as marcas.
+const recent = group
+  ? [articlesOf('enne')[0], articlesOf('ife')[0], articlesOf('nilo')[1]]
+  : rest.slice(0, 3);
+const library = rest.slice(0, 9);
+const explore = exploreLinks(brand);
+const [leadMaterial, ...moreMaterials] = materials;
+const ctaLabel = (tag: string) => (tag === 'Infográfico' ? 'Ver infográfico' : 'Baixar e-book');
+// Índice: no Grupo, uma linha por marca; na marca, uma linha por categoria.
+const themes = group
+  ? Object.values(brands).filter((b) => !isGroup(b)).map((b) => {
+      const items = articlesOf(b.id as 'nilo');
+      return { name: b.tab, article: items[0], count: items.length, link: b.base, linkLabel: `Ir para o ${b.blogTitle}` };
+    })
+  : brand.categories.map((c) => {
+      const items = list.filter((a) => a.category === c.slug);
+      return { name: c.name, article: items[0], count: items.length, link: categoryHref(brand, c.slug), linkLabel: `Ver artigos de ${c.name}` };
+    }).filter((t) => t.article);
+---
+<Editorial brand={brand} title={brand.blogTitle} heroSrc={brand.hero.src}>
+  <section class="ed-hero ed-hero--art">
+    <img class="ed-hero__img" src={brand.hero.src} alt="" fetchpriority="high" />
+    <div class="ed-hero__in">
+      <p class="ed-eyebrow ed-eyebrow--light">Artigos</p>
+      <h1>{brand.blogTitle}</h1>
+      <p class="ed-hero__lead">Confira as últimas notícias, novidades, informações e avanços em Reprodução Assistida!</p>
+      <a class="ed-pill" href="#destaque">Ler os artigos <Icon name="arrow" size={18} /></a>
+    </div>
+    <div class="ed-hero__bar">
+      <nav aria-label={group ? 'Blogs do grupo' : 'Categorias'}>
+        <span>{group ? 'Blogs' : 'Explorar'}</span>
+        {explore.map((l) => <a href={l.href}>{l.label}</a>)}
+      </nav>
+    </div>
+  </section>
+
+  <section class="wrap ed-featured reveal" id="destaque">
+    <div>
+      <p class="ed-eyebrow">Em destaque · {cardLabel(brand, featured)} · {featured.time}</p>
+      <h2><a href={href}>{featured.title}</a></h2>
+      <p>{featured.excerpt}</p>
+      <a class="ed-arrow-link" href={href}><i><Icon name="arrow" size={14} /></i>Ler artigo</a>
+    </div>
+    <a href={href} tabindex="-1" aria-hidden="true"><div class="media"><img src={featured.image} alt="" loading="lazy" /></div></a>
+  </section>
+
+  <section class="wrap ed-section">
+    <p class="ed-eyebrow reveal">Mais recentes</p>
+    <h2 class="ed-title reveal">Últimos artigos</h2>
+    <div class="ed-grid">
+      {recent.map((a, i) => <ArticleCard article={a} brand={brand} delay={i * 0.08} />)}
+    </div>
+  </section>
+
+  <section class="wrap ed-index" id="temas">
+    <div class="ed-index__head reveal">
+      <div>
+        <p class="ed-eyebrow">{group ? 'Marcas' : 'Temas'}</p>
+        <h2 class="ed-title">{group ? 'Explore por marca' : 'Explore por tema'}</h2>
+      </div>
+      <p>{group
+        ? 'Cada marca do grupo tem seu próprio blog, com os assuntos que fazem parte do seu cuidado.'
+        : 'Escolha um assunto e encontre tudo o que já publicamos sobre ele.'}</p>
+    </div>
+    <ol class="ed-index__list">
+      {themes.map((t, i) => (
+        <li class="reveal" style={`--d:${i * 0.06}s`}>
+          <a class="ed-row" href={t.link} aria-label={`${t.linkLabel}: ${t.count} ${t.count === 1 ? 'artigo' : 'artigos'}`}>
+            <span class="ed-row__n">{String(i + 1).padStart(2, '0')}</span>
+            <span class="ed-row__name">{t.name}</span>
+            <span class="ed-row__latest"><small>Mais recente</small>{t.article.title}</span>
+            <span class="ed-row__count">{t.count} {t.count === 1 ? 'artigo' : 'artigos'}</span>
+            <span class="ed-row__arrow"><Icon name="arrow" size={22} /></span>
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="ed-mats" id="materiais">
+    <div class="wrap ed-mats__spread">
+      <a class="ed-mats__feature reveal" href="#">
+        <div class="media"><img src={leadMaterial.image} alt="" loading="lazy" /></div>
+        <div class="ed-mats__meta"><TypeBadge type={leadMaterial.tag} /><i></i>Material gratuito</div>
+        <h3>{leadMaterial.title}</h3>
+        <p>{leadMaterial.description}</p>
+        <span class="ed-mats__cta">{ctaLabel(leadMaterial.tag)} <Icon name="arrow" size={15} /></span>
+      </a>
+      <div class="ed-mats__side">
+        <div class="reveal">
+          <p class="ed-eyebrow">Materiais</p>
+          <h2 class="ed-title">Conteúdos para aprofundar sua leitura</h2>
+          <p class="ed-mats__intro">E-books e infográficos para ler com calma e voltar quando precisar.</p>
+        </div>
+        <ol class="ed-mats__toc">
+          {moreMaterials.map((m, i) => (
+            <li class="reveal" style={`--d:${(i + 1) * 0.08}s`}>
+              <a href="#">
+                <span class="ed-mats__n">{String(i + 2).padStart(2, '0')}</span>
+                <span>
+                  <TypeBadge type={m.tag} />
+                  <span class="ed-mats__title">{m.title}</span>
+                  <span class="ed-mats__desc">{m.description}</span>
+                </span>
+                <Icon name="arrow" size={20} />
+              </a>
+            </li>
+          ))}
+        </ol>
+        <a class="link-more reveal" href="#">Ver todos os materiais <Icon name="arrow" size={16} /></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap ed-section" id="artigos" data-ed-list>
+    <div class="ed-section__head reveal">
+      <div>
+        <p class="ed-eyebrow">Biblioteca</p>
+        <h2 class="ed-title">Todos os artigos</h2>
+      </div>
+      <form class="ed-search" data-search-form role="search">
+        <input type="search" data-ed-search placeholder="Buscar por assunto" aria-label="Buscar por assunto" />
+        <Icon name="search" size={18} />
+      </form>
+    </div>
+    <div class="ed-grid">
+      {library.map((a, i) => <ArticleCard article={a} brand={brand} delay={(i % 3) * 0.08} />)}
+    </div>
+    <p class="ed-empty" data-ed-empty hidden>Nenhum artigo encontrado para essa busca.</p>
+    {rest.length > 9 && <Pager />}
+  </section>
+
+  <Newsletter />
+</Editorial>

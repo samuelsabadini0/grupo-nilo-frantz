@@ -1,0 +1,22 @@
+---
+import Icon from './Icon.astro';
+import { menuLinks } from '../data/content';
+import type { Brand } from '../data/brands';
+interface Props { brand: Brand; overlay?: boolean; links?: { label: string; href: string }[] }
+const { brand, overlay = false, links } = Astro.props;
+const items = links ?? menuLinks.map((label) => ({ label, href: '#' }));
+---
+<header class:list={['menu', { 'menu--overlay': overlay }]}>
+  <div class="menu__in">
+    <a class="menu__logo" href={brand.id === 'grupo' ? '/' : brand.base} aria-label={brand.name}>
+      {brand.logo
+        ? <img src={brand.logo.src} width={brand.logo.width} height={brand.logo.height} alt={brand.name} />
+        : <span class="textlogo">GRUPO<b>NILO FRANTZ</b></span>}
+    </a>
+    <nav class="menu__nav" aria-label="Principal">
+      {items.map((l) => <a href={l.href}>{l.label}</a>)}
+    </nav>
+    <slot name="end" />
+    <button class="menu__toggle" type="button" data-menu-toggle aria-label="Abrir menu" aria-expanded="false"><Icon name="menu" size={26} /></button>
+  </div>
+</header>

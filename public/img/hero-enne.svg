@@ -1,0 +1,16 @@
+<svg width="1440" height="722" viewBox="0 0 1440 722" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="CONTE&#195;&#154;DO EM DESTAQUE" clip-path="url(#clip0_0_4)">
+<rect width="1440" height="722" fill="url(#paint0_linear_0_4)"/>
+<path id="Vector 3" opacity="0.03" d="M-69 766.526V88.4614C-69 53.5248 -55.1129 20.0209 -30.3971 -4.67122C11.7243 -46.7523 76.8467 -55.3237 128.422 -25.575L134.305 -22.1817C157.193 -8.98023 175.894 10.4072 188.263 33.7554L591 794V-76" stroke="white" stroke-width="119"/>
+<path id="Vector 4" opacity="0.03" d="M759 766.526V88.4614C759 53.5248 772.887 20.0209 797.603 -4.67122C839.724 -46.7523 904.847 -55.3237 956.422 -25.575L962.305 -22.1817C985.193 -8.98023 1003.89 10.4072 1016.26 33.7554L1419 794V-76" stroke="white" stroke-width="119"/>
+</g>
+<defs>
+<linearGradient id="paint0_linear_0_4" x1="906.5" y1="259" x2="233.5" y2="259" gradientUnits="userSpaceOnUse">
+<stop stop-color="#55305B"/>
+<stop offset="1" stop-color="#2C4F53"/>
+</linearGradient>
+<clipPath id="clip0_0_4">
+<rect width="1440" height="722" fill="white"/>
+</clipPath>
+</defs>
+</svg>

@@ -1,0 +1,10 @@
+---
+import Home from '../../components/editorial/Home.astro';
+import { subBrands, type Brand } from '../../data/brands';
+
+export const getStaticPaths = () =>
+  subBrands.map((brand) => ({ params: { brand: brand.base.replaceAll('/', '') }, props: { brand } }));
+
+const { brand } = Astro.props as { brand: Brand };
+---
+<Home brand={brand} />

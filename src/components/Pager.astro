@@ -1,0 +1,8 @@
+---
+import Icon from './Icon.astro';
+const pages = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+---
+<nav class="pager" aria-label="Paginação">
+  {pages.map((p) => <a href="#" aria-current={p === 1 ? 'page' : undefined}>{p}</a>)}
+  <a class="pager__next" href="#">Próximo <Icon name="arrow" size={13} /></a>
+</nav>

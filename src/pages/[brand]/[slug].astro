@@ -1,0 +1,11 @@
+---
+import Post from '../../components/editorial/Post.astro';
+import { subBrands, type Brand } from '../../data/brands';
+import { POST_SLUG } from '../../data/content';
+
+export const getStaticPaths = () =>
+  subBrands.map((brand) => ({ params: { brand: brand.base.replaceAll('/', ''), slug: POST_SLUG }, props: { brand } }));
+
+const { brand } = Astro.props as { brand: Brand };
+---
+<Post brand={brand} />

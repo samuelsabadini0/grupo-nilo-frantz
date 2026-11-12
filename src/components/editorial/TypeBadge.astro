@@ -1,0 +1,7 @@
+---
+import Icon from '../Icon.astro';
+interface Props { type: string }
+const { type } = Astro.props;
+const icon = type === 'Infográfico' ? 'chart' : 'book';
+---
+<span class="ed-badge"><Icon name={icon} size={14} />{type}</span>

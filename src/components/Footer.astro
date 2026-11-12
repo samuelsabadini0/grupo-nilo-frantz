@@ -1,0 +1,34 @@
+---
+import Icon from './Icon.astro';
+import { footerColumns } from '../data/content';
+import type { Brand } from '../data/brands';
+interface Props { brand: Brand }
+const { brand } = Astro.props;
+---
+<footer>
+  <div class="footer">
+    <div class="footer__in">
+      <div class="footer__brand">
+        <img src={brand.footerLogo.src} width={brand.footerLogo.width} height={brand.footerLogo.height} alt={brand.name} loading="lazy" />
+        <p>Lorem ipsum dolor sit amet.</p>
+      </div>
+      {footerColumns.map((c) => (
+        <div>
+          <h3>{c.title}</h3>
+          <ul>{c.links.map((l) => <li><a href="#">{l}</a></li>)}</ul>
+        </div>
+      ))}
+      <div class="footer__social">
+        <a href="#" aria-label="TikTok"><Icon name="music" size={16} /></a>
+        <a href="#" aria-label="Facebook"><Icon name="facebook" size={16} /></a>
+        <a href="#" aria-label="Instagram"><Icon name="instagram" size={16} /></a>
+      </div>
+    </div>
+  </div>
+  <div class="bottom">
+    <div class="bottom__in">
+      <span>© Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+      <span>Lorem ipsum dolor sit amet</span>
+    </div>
+  </div>
+</footer>

@@ -1,0 +1,64 @@
+---
+import Editorial from '../../layouts/Editorial.astro';
+import ArticleCard from './ArticleCard.astro';
+import Newsletter from './Newsletter.astro';
+import { post } from '../../data/content';
+import { articles } from '../../data/articles';
+import { blogArticles, categoryHref, categoryName } from '../../data/blog';
+import type { Brand } from '../../data/brands';
+
+interface Props { brand: Brand }
+const { brand } = Astro.props;
+// O único post com texto completo pertence ao Nilo Frantz; nas outras marcas ele aparece sem categoria.
+const article = articles[0];
+const category = article.brand === brand.id ? categoryName(brand, article.category) : '';
+const related = blogArticles(brand).filter((a) => a !== article).slice(0, 3);
+---
+<Editorial brand={brand} title={`${post.title} | ${brand.blogTitle}`} description={article.excerpt} heroSrc={post.cover}>
+  <div class="ed-progress" data-ed-progress></div>
+  <section class="ed-hero ed-hero--page ed-hero--post">
+    <img class="ed-hero__img" src={post.cover} alt="" fetchpriority="high" />
+    <div class="ed-hero__in">
+      <div class="ed-crumbs"><a href={brand.base}>Blog</a>{category && <><span>/</span><a href={categoryHref(brand, article.category)}>{category}</a></>}</div>
+      <p class="ed-eyebrow ed-eyebrow--light">{category && `${category} · `}{post.readTime} de leitura</p>
+      <h1>{post.title}</h1>
+      <p class="ed-hero__by">{post.published}</p>
+    </div>
+  </section>
+
+  <div class="wrap ed-post">
+    <article class="ed-body">
+      {post.intro.map((p) => <p>{p}</p>)}
+      {post.sections.map((s) => (
+        <>
+          {s.level === 2 ? <h2 id={s.id}>{s.title}</h2> : <h3 id={s.id}>{s.title}</h3>}
+          {s.paragraphs.map((p) => <p set:html={p} />)}
+        </>
+      ))}
+    </article>
+    <aside class="ed-aside">
+      <nav class="ed-toc" aria-label="Sumário" data-ed-toc>
+        <strong>Sumário</strong>
+        <ol>{post.sections.map((s) => <li><a href={`#${s.id}`}>{s.title}</a></li>)}</ol>
+      </nav>
+      <div class="ed-review">
+        <small>Revisado por</small>
+        <div class="ed-review__who">
+          <div class="ed-review__photo">Foto</div>
+          <strong>{post.reviewer}</strong>
+        </div>
+        <a class="btn" href="#consulta">Agende sua consulta</a>
+      </div>
+    </aside>
+  </div>
+
+  <section class="wrap ed-section">
+    <p class="ed-eyebrow reveal">Continue lendo</p>
+    <h2 class="ed-title reveal">Artigos relacionados</h2>
+    <div class="ed-grid">
+      {related.map((a, i) => <ArticleCard article={a} brand={brand} delay={i * 0.08} />)}
+    </div>
+  </section>
+
+  <Newsletter />
+</Editorial>

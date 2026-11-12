@@ -1,0 +1,33 @@
+---
+import '@fontsource/poppins/300.css';
+import '@fontsource/poppins/400.css';
+import '@fontsource/poppins/500.css';
+import '@fontsource/poppins/600.css';
+import '@fontsource/poppins/700.css';
+import '../styles/global.css';
+import { themeStyle, type Brand } from '../data/brands';
+import ReviewBar from '../components/ReviewBar.astro';
+
+// Barra de navegação para o cliente revisar as páginas. Desligar antes de publicar.
+const SHOW_REVIEW_BAR = true;
+
+interface Props { title: string; brand: Brand; description?: string; pageBg?: string }
+const { title, brand, description = 'Medicina reprodutiva e fertilidade.', pageBg } = Astro.props;
+---
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <script is:inline>document.documentElement.classList.add('js')</script>
+  </head>
+  <body style={`${themeStyle(brand)}${pageBg ? `;background:${pageBg}` : ''}`}>
+    {SHOW_REVIEW_BAR && <ReviewBar />}
+    <slot />
+    <script>
+      import '../scripts/main.ts';
+    </script>
+  </body>
+</html>

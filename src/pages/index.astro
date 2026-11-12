@@ -1,0 +1,292 @@
+---
+import Base from '../layouts/Base.astro';
+import Header from '../components/Header.astro';
+import Icon from '../components/Icon.astro';
+import { brands, themeStyle } from '../data/brands';
+import { group, LOREM_S, LOREM_M, LOREM_L, menuLinks } from '../data/content';
+
+const brand = brands.grupo;
+const anchors = ['#marcas', '#numeros', '#diferenciais', '#depoimentos'];
+// Do site do Grupo, o blog abre sempre no blog geral, que organiza os artigos por marca.
+const links = [...menuLinks.map((label, i) => ({ label, href: anchors[i] })), { label: 'Blog', href: '/blog/' }];
+---
+<Base title="Grupo Nilo Frantz" brand={brand}>
+  <Header brand={brand} overlay links={links} />
+  <main>
+    <section class="hero" id="inicio">
+      <picture>
+        <source media="(max-width: 760px)" srcset="/img/hero-grupo-mobile.webp" />
+        <source media="(max-width: 1024px)" srcset="/img/hero-grupo-tablet.webp" />
+        <img class="hero__img" src="/img/hero-grupo.webp" alt="Dr. Nilo Frantz em seu consultório" fetchpriority="high" />
+      </picture>
+      <div class="hero__in wrap">
+        <p class="eyebrow hero__eyebrow">Grupo Nilo Frantz</p>
+        <h1>Lorem ipsum dolor, consectetur adipiscing</h1>
+        <p class="hero__lead">{LOREM_S}</p>
+        <a class="pill" href="#marcas">Quem somos <Icon name="arrow" size={18} /></a>
+      </div>
+    </section>
+
+    <section class="wrap eco reveal" id="marcas" data-tabs data-tabs-theme style={themeStyle(brands[group.ecosystem[0].brand])}>
+      <div class="eco__nav">
+        <p class="eco__kicker">Lorem ipsum dolor elit</p>
+        <div role="tablist" aria-orientation="vertical" aria-label="Marcas do grupo">
+          {group.ecosystem.map((e, i) => (
+            <button type="button" role="tab" id={`tab-${e.brand}`} aria-controls={`panel-${e.brand}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1}>
+              {brands[e.brand].name}
+            </button>
+          ))}
+        </div>
+      </div>
+      {group.ecosystem.map((e, i) => (
+        <div class="eco__panel" role="tabpanel" id={`panel-${e.brand}`} aria-labelledby={`tab-${e.brand}`} hidden={i !== 0} style={themeStyle(brands[e.brand])}>
+          <div class="media eco__media"><img src={e.image} alt="" loading="lazy" /></div>
+          <div class="eco__text">
+            <h2>Lorem ipsum dolor sit amet, consectetur</h2>
+            <p>{LOREM_M}</p>
+            <a class="link-more" href="#">Quem somos <Icon name="arrow" size={16} /></a>
+          </div>
+        </div>
+      ))}
+    </section>
+
+    <section class="wrap move reveal">
+      <div>
+        <span class="tick"></span>
+        <h2>Lorem ipsum<br />dolor elit</h2>
+        <p>{LOREM_S}</p>
+        <button class="move__watch" type="button" data-video-open><span class="play"><svg width="10" height="12" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z" fill="currentColor"/></svg></span>Assista o vídeo</button>
+      </div>
+      <button class="move__poster media" type="button" data-video-open aria-label="Assistir ao vídeo">
+        <img src="/img/embriao-video.webp" alt="" loading="lazy" />
+        <span class="move__play"><svg width="22" height="26" viewBox="0 0 10 12" aria-hidden="true"><path d="M0 0l10 6-10 6z" fill="currentColor"/></svg></span>
+      </button>
+    </section>
+
+    <section class="wrap stats" id="numeros">
+      <p class="eyebrow reveal">Lorem Ipsum</p>
+      <h2 class="title40 reveal">Lorem ipsum dolor elit</h2>
+      <div class="stats__grid">
+        {group.stats.map((s, i) => (
+          <div class="stat reveal" style={`--d:${i * 0.1}s`}>
+            <strong>{s.prefix && <i>{s.prefix}</i>}<span data-count={s.value} data-decimals={s.decimals}>{s.value.toFixed(s.decimals)}</span>{s.suffix}</strong>
+            <span>{s.label}</span>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="dark" id="diferenciais" data-rail>
+      <div class="wrap dark__head reveal">
+        <div>
+          <p class="eyebrow">Lorem Ipsum</p>
+          <h2 class="title40">Lorem ipsum dolor sit amet, consectetur adipiscing elit</h2>
+        </div>
+        <p>{LOREM_L}</p>
+      </div>
+      <div class="rail reveal">
+        <button class="rail__btn rail__btn--prev" type="button" data-rail-prev aria-label="Anterior" hidden><Icon name="arrow-left" size={22} /></button>
+        <div class="rail__track" data-rail-track tabindex="0" aria-label="Diferenciais">
+          {group.numbered.map((c) => (
+            <article class="ncard">
+              <div class="media"><img src={c.image} alt="" loading="lazy" /></div>
+              <div>
+                <span class="ncard__n">{c.n}</span>
+                <h3>Lorem ipsum dolor sit amet, consectetur</h3>
+                <p>{LOREM_M}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+        <button class="rail__btn rail__btn--next" type="button" data-rail-next aria-label="Próximo"><Icon name="arrow" size={22} /></button>
+      </div>
+    </section>
+
+    <section class="wrap quotes" id="depoimentos" data-slider>
+      <div class="quotes__head reveal">
+        <div>
+          <p class="eyebrow">Lorem Ipsum</p>
+          <h2 class="title40">Lorem ipsum dolor elit</h2>
+        </div>
+        <div class="quotes__arrows">
+          <button type="button" data-prev aria-label="Depoimento anterior"><Icon name="arrow-left" size={22} /></button>
+          <button type="button" data-next aria-label="Próximo depoimento"><Icon name="arrow" size={22} /></button>
+        </div>
+      </div>
+      {group.testimonials.map((t, i) => (
+        <div class="quote" data-slide hidden={i !== 0}>
+          <div>
+            <span class="quote__mark" aria-hidden="true">“</span>
+            <blockquote>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.”</blockquote>
+            <div class="quote__by">
+              <img src={t.photo} alt="" width="50" height="50" loading="lazy" />
+              <div><strong>{t.name}</strong><span>{t.role}</span></div>
+            </div>
+          </div>
+          <div class="media quote__media"><img src={t.image} alt="" loading="lazy" /></div>
+        </div>
+      ))}
+      <div class="quotes__dots">
+        {group.testimonials.map((_, i) => <button type="button" data-dot aria-label={`Depoimento ${i + 1}`} aria-current={i === 0 ? 'true' : 'false'}></button>)}
+      </div>
+    </section>
+  </main>
+
+  <div class="bottom">
+    <div class="bottom__in">
+      <span>© Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
+      <span>Lorem ipsum dolor sit amet</span>
+    </div>
+  </div>
+
+  <dialog class="video" data-video-dialog data-src={group.videoUrl}>
+    <button type="button" data-video-close aria-label="Fechar"><Icon name="close" size={22} /></button>
+    {group.videoUrl
+      ? <iframe title="Vídeo institucional" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      : <p>O vídeo institucional entra aqui assim que o link for definido.</p>}
+  </dialog>
+</Base>
+
+<style>
+  .hero { position: relative; min-height: 722px; overflow: hidden; background: #3b0e31; color: #fff; }
+  .hero__img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 5% bottom; }
+  .hero::after { content: ''; position: absolute; inset: 0; background:
+    radial-gradient(70% 90% at 92% -10%, rgba(143, 30, 130, .5), transparent 70%),
+    linear-gradient(90deg, #3b0e31 0%, rgba(59, 14, 49, .96) 18%, rgba(59, 14, 49, .72) 34%, rgba(59, 14, 49, .2) 52%, transparent 66%),
+    linear-gradient(180deg, rgba(59, 14, 49, .38), transparent 22%); }
+  .hero__in { position: relative; z-index: 1; padding-top: 206px; padding-bottom: 80px; }
+  .hero__eyebrow { color: #da549d; }
+  h1 { max-width: 600px; margin-top: 48px; font-weight: 500; font-size: clamp(36px, 3.62vw, 52px); line-height: 1.15; letter-spacing: -.03em; }
+  .hero__lead { max-width: 372px; margin-top: 24px; font-size: 18px; line-height: 24px; letter-spacing: -.03em; }
+  .pill { display: inline-flex; align-items: center; justify-content: center; gap: 16px; width: 244px; height: 62px; margin-top: 56px; border: 1px solid #fff; border-radius: 800px; background: rgba(255, 255, 255, .05); backdrop-filter: blur(7px); -webkit-backdrop-filter: blur(7px); transition: background .3s, color .3s; }
+  .pill:hover { background: #fff; color: #3b0e31; }
+  .pill :global(svg) { transition: transform .3s var(--ease); }
+  .pill:hover :global(svg) { transform: translateX(5px); }
+
+  .eco { display: grid; grid-template-columns: 350px 1fr; align-items: center; min-height: 642px; margin-top: 160px; padding: 64px 68px; background: var(--soft); border-radius: 4px; transition: background-color .6s var(--ease); }
+  .eco__kicker { font-size: 14px; line-height: 20px; color: var(--deep); transition: color .6s; }
+  .eco__kicker::before { content: ''; display: block; width: 27px; height: 1px; margin-bottom: 18px; background: var(--accent); transition: background .6s; }
+  .eco [role='tablist'] { display: flex; flex-direction: column; align-items: flex-start; gap: 60px; margin-top: 56px; }
+  .eco [role='tab'] { position: relative; padding-left: 26px; font-weight: 300; font-size: 32px; line-height: 1.2; color: var(--muted); text-align: left; transition: color .3s; }
+  .eco [role='tab']:hover { color: var(--deep); }
+  .eco [role='tab'][aria-selected='true'] { color: var(--deep); font-weight: 400; }
+  .eco [role='tab'][aria-selected='true']::before { content: ''; position: absolute; left: 0; top: 50%; width: 8px; height: 8px; margin-top: -4px; border-radius: 50%; background: var(--accent); }
+  .eco__panel { display: grid; grid-template-columns: 318px 1fr; gap: 34px; align-items: stretch; animation: fade .55s var(--ease); }
+  .eco__media { height: 455px; }
+  .eco__text { align-self: end; }
+  .eco__text h2 { font-weight: 300; font-size: 32px; line-height: 40px; color: var(--deep); }
+  .eco__text p { margin-top: 12px; line-height: 24px; }
+  .eco__text .link-more { margin-top: 44px; font-weight: 400; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .move { display: grid; grid-template-columns: 1fr 684px; gap: 48px; align-items: center; margin-top: 180px; }
+  .tick { display: block; width: 27px; height: 1px; background: #e7007e; }
+  .move h2 { margin-top: 18px; font-weight: 300; font-size: 40px; line-height: 46px; color: #3b0e31; text-transform: uppercase; letter-spacing: -.045em; }
+  .move p { max-width: 372px; margin-top: 28px; line-height: 24px; }
+  .move__watch { display: inline-flex; align-items: center; gap: 16px; margin-top: 110px; font-weight: 500; color: #3b0e31; }
+  .play { display: grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: #e7007e; color: #fff; }
+  .move__poster { position: relative; display: block; width: 100%; aspect-ratio: 684 / 445; }
+  .move__poster::after { content: ''; position: absolute; inset: 0; background: rgba(59, 14, 49, .38); }
+  .move__play { position: absolute; inset: 0; z-index: 1; display: grid; place-items: center; color: #e7007e; transition: transform .3s var(--ease); }
+  .move__poster:hover .move__play { transform: scale(1.2); }
+
+  .stats { margin-top: 180px; }
+  .title40 { margin-top: 18px; font-weight: 300; font-size: 40px; line-height: 46px; color: #3b0e31; letter-spacing: -.045em; }
+  .stats__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 21px; margin-top: 40px; }
+  .stat { display: flex; align-items: center; gap: 24px; min-height: 121px; padding: 16px 12px 16px 32px; background: #ffedf7; border-radius: 4px; }
+  .stat strong { font-weight: 300; font-size: 40px; line-height: 46px; color: #3b0e31; white-space: nowrap; letter-spacing: -.03em; }
+  .stat strong i { margin-right: 18px; font-style: normal; color: #e7007e; }
+  .stat > span { font-size: 16px; line-height: 22px; letter-spacing: -.01em; }
+
+  .dark { margin-top: 170px; padding: 142px 0 192px; background: #3b0e31; color: #fff; overflow: hidden; }
+  .dark__head { display: grid; grid-template-columns: 1fr 486px; gap: 48px; }
+  .dark .eyebrow { color: #da549d; }
+  .dark .title40 { max-width: 440px; color: #fff; }
+  .dark__head > p { line-height: 24px; padding-top: 30px; }
+  .rail { position: relative; margin-top: 76px; }
+  .rail__track { display: flex; gap: 16px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding-left: max(24px, calc((100vw - 1184px) / 2)); scroll-padding-left: max(24px, calc((100vw - 1184px) / 2)); padding-right: 24px; }
+  .rail__track::-webkit-scrollbar { display: none; }
+  .ncard { flex: 0 0 min(682px, 86vw); display: grid; grid-template-columns: 209px 1fr; gap: 34px; align-items: center; padding: 58px 22px 58px 58px; background: #ffedf7; border-radius: 4px; scroll-snap-align: start; color: var(--ink); }
+  .ncard .media { height: 209px; }
+  .ncard__n { font-weight: 300; font-size: 32px; line-height: 40px; color: #e7007e; }
+  .ncard h3 { margin-top: 10px; font-weight: 300; font-size: 32px; line-height: 40px; color: #3b0e31; }
+  .ncard p { margin-top: 8px; line-height: 24px; }
+  .rail__btn { position: absolute; top: 50%; z-index: 2; display: grid; place-items: center; width: 52px; height: 48px; margin-top: -24px; border-radius: 4px; background: #e7007e; color: #fff; transition: transform .3s var(--ease); }
+  .rail__btn:hover { transform: scale(1.08); }
+  .rail__btn--next, .rail__btn--prev { left: max(4px, calc((100vw - 1184px) / 2 - 26px)); }
+  .rail__btn--prev { margin-top: -80px; }
+
+  .quotes { padding: 166px 0 150px; }
+  .quotes__head { display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; }
+  .quotes__arrows { display: flex; gap: 16px; }
+  .quotes__arrows button { display: grid; place-items: center; width: 52px; height: 48px; border-radius: 4px; background: #ff97d0; color: #3b0e31; transition: background .25s, color .25s; }
+  .quotes__arrows button:hover { background: #e7007e; color: #fff; }
+  .quote { display: grid; grid-template-columns: minmax(0, 595px) minmax(0, 564px); justify-content: space-between; gap: 32px; align-items: center; margin-top: 48px; animation: fade .55s var(--ease); }
+  .quote__mark { display: block; height: 32px; font-size: 68px; line-height: 64px; font-style: italic; color: #e7007e; }
+  blockquote { margin: 16px 0 0; font-size: clamp(30px, 3.3vw, 48px); line-height: 1.05; letter-spacing: -.03em; color: var(--ink); }
+  .quote__by { display: flex; align-items: center; gap: 18px; margin-top: 36px; }
+  .quote__by img { width: 50px; height: 50px; border-radius: 50%; object-fit: cover; object-position: top; }
+  .quote__by strong { display: block; font-weight: 500; line-height: 20px; color: #3b0e31; }
+  .quote__by span { font-weight: 500; font-size: 14px; line-height: 20px; }
+  .quote__media { aspect-ratio: 564 / 375; }
+  .quotes__dots { display: flex; gap: 5px; margin-top: -8px; padding-left: 8px; }
+  .quotes__dots button { width: 7px; height: 7px; border-radius: 50%; background: #d9d9d9; transition: background .25s; }
+  .quotes__dots button[aria-current='true'] { background: #e7007e; }
+
+  .video { width: min(900px, 92vw); padding: 0; border: 0; border-radius: 8px; background: #2a0923; color: #fff; }
+  .video::backdrop { background: rgba(20, 4, 16, .75); }
+  .video p { padding: 72px 32px; text-align: center; }
+  .video iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; }
+  .video button { position: absolute; top: 10px; right: 10px; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; color: #fff; }
+
+  @media (max-width: 1180px) {
+    .eco { grid-template-columns: 240px 1fr; padding: 48px 32px; margin-top: 96px; }
+    .eco [role='tab'] { font-size: 24px; }
+    .eco__panel { grid-template-columns: 1fr; }
+    .eco__media { height: 300px; }
+    .move { grid-template-columns: 1fr 1.4fr; margin-top: 110px; }
+    .stats { margin-top: 110px; }
+    .stat { flex-direction: column; align-items: flex-start; gap: 4px; }
+    .dark { margin-top: 110px; padding: 90px 0 110px; }
+    .dark__head { grid-template-columns: 1fr 1fr; }
+    .quotes { padding: 110px 0 96px; }
+  }
+  /* Tablet e mobile: imagens próprias com o degradê embutido; o texto fica embaixo, sobre o degradê */
+  @media (max-width: 1024px) {
+    .hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: 0; aspect-ratio: 1536 / 1688; }
+    .hero__img { object-position: center top; }
+    .hero::after { display: none; }
+    .hero__in { padding-top: 0; padding-bottom: 72px; }
+    h1 { max-width: 640px; margin-top: 24px; }
+    .hero__lead { max-width: 460px; }
+    .pill { margin-top: 36px; }
+  }
+  @media (max-width: 760px) {
+    .hero { aspect-ratio: auto; min-height: max(calc(100vw * 1688 / 780), 640px); }
+    .hero__in { padding-bottom: 48px; }
+    h1 { margin-top: 20px; font-size: 34px; }
+    .hero__lead { font-size: 16px; line-height: 23px; }
+    .pill { margin-top: 32px; height: 54px; width: 210px; }
+    .eco { grid-template-columns: 1fr; margin-top: 64px; padding: 32px 24px; min-height: 0; gap: 28px; width: 100%; border-radius: 0; }
+    .eco [role='tablist'] { flex-direction: row; flex-wrap: wrap; gap: 10px 22px; margin-top: 18px; }
+    .eco [role='tab'] { font-size: 20px; padding-left: 16px; }
+    .eco__text h2, .ncard h3 { font-size: 24px; line-height: 30px; }
+    .move { grid-template-columns: 1fr; margin-top: 72px; gap: 28px; }
+    .move h2, .title40 { font-size: 30px; line-height: 36px; }
+    .move__watch { margin-top: 24px; }
+    .stats { margin-top: 72px; }
+    .stats__grid { grid-template-columns: 1fr; gap: 12px; }
+    .stat { flex-direction: row; align-items: center; min-height: 96px; padding: 12px 24px; gap: 16px; }
+    .dark { margin-top: 72px; padding: 64px 0 72px; }
+    .dark__head { grid-template-columns: 1fr; gap: 16px; }
+    .dark__head > p { padding-top: 0; }
+    .rail { margin-top: 36px; }
+    .ncard { grid-template-columns: 1fr; padding: 24px; }
+    .ncard .media { height: 180px; }
+    .rail__btn { display: none; }
+    .quotes { padding: 72px 0; }
+    .quote { grid-template-columns: 1fr; }
+    blockquote { line-height: 1.2; }
+    .quotes__dots { margin-top: 20px; }
+  }
+</style>
