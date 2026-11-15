@@ -1,0 +1,11 @@
+---
+import Materials from '../../../components/editorial/Materials.astro';
+import { brandList, type Brand } from '../../../data/brands';
+
+// Todos os blogs têm catálogo, inclusive o blog geral do Grupo (/blog/materiais/)
+export const getStaticPaths = () =>
+  brandList.map((brand) => ({ params: { brand: brand.base.replaceAll('/', '') }, props: { brand } }));
+
+const { brand } = Astro.props as { brand: Brand };
+---
+<Materials brand={brand} />

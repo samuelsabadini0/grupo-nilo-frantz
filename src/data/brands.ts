@@ -14,6 +14,8 @@ export interface Brand {
   footerLogo: { src: string; width: number; height: number };
   /** Fundo gráfico do hero do blog, desenhado a partir do Figma de cada marca */
   hero: { src: string };
+  /** Favicon da aba e ícone para a tela inicial do celular */
+  favicon: { src: string; touch: string };
   /** Filtro que leva a foto do embrião à cor da marca (usada no bloco de consulta) */
   photoFilter?: string;
   /**
@@ -46,6 +48,7 @@ export const brands: Record<BrandId, Brand> = {
     logo: null, // O Figma usa apenas texto no lugar da logo do Grupo
     footerLogo: logoNilo,
     hero: { src: '/img/hero-grupo-blog.svg' },
+    favicon: { src: '/img/favicon-grupo.svg', touch: '/img/apple-touch-grupo.png' },
     theme: niloTheme,
   },
   nilo: {
@@ -64,6 +67,7 @@ export const brands: Record<BrandId, Brand> = {
     logo: logoNilo,
     footerLogo: logoNilo,
     hero: { src: '/img/hero-nilo.svg' },
+    favicon: { src: '/img/favicon-nilo.svg', touch: '/img/apple-touch-nilo.png' },
     theme: niloTheme,
   },
   enne: {
@@ -81,6 +85,7 @@ export const brands: Record<BrandId, Brand> = {
     logo: logoEnne,
     footerLogo: logoEnne,
     hero: { src: '/img/hero-enne.svg' },
+    favicon: { src: '/img/favicon-enne.svg', touch: '/img/apple-touch-enne.png' },
     photoFilter: 'hue-rotate(-30deg) saturate(.7)',
     theme: {
       deep: '#2c4f53', 'deep-2': '#1d2f31', accent: '#55305b', 'btn-bg': '#55305b',
@@ -103,6 +108,7 @@ export const brands: Record<BrandId, Brand> = {
     logo: logoIfe,
     footerLogo: logoIfe,
     hero: { src: '/img/hero-ife.webp' },
+    favicon: { src: '/img/favicon-ife.png', touch: '/img/apple-touch-ife.png' },
     photoFilter: 'hue-rotate(185deg) saturate(.85)',
     theme: {
       deep: '#1e5468', 'deep-2': '#163f4f', accent: '#008d97', 'btn-bg': '#008d97',

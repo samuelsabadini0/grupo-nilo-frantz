@@ -1,0 +1,16 @@
+---
+import MaterialPage from '../../../components/editorial/MaterialPage.astro';
+import { brandList, type Brand } from '../../../data/brands';
+import { materials, type Material } from '../../../data/articles';
+
+export const getStaticPaths = () =>
+  brandList.flatMap((brand) =>
+    materials.map((material) => ({
+      params: { brand: brand.base.replaceAll('/', ''), slug: material.slug },
+      props: { brand, material },
+    })),
+  );
+
+const { brand, material } = Astro.props as { brand: Brand; material: Material };
+---
+<MaterialPage brand={brand} material={material} />

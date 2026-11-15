@@ -5,7 +5,7 @@ import Pager from '../Pager.astro';
 import ArticleCard from './ArticleCard.astro';
 import Sidebar from './Sidebar.astro';
 import TypeBadge from './TypeBadge.astro';
-import { articlesOf, materials } from '../../data/articles';
+import { articlesOf, materialHref, materials } from '../../data/articles';
 import { brands, type Brand } from '../../data/brands';
 import { blogArticles, cardLabel, categoryHref, exploreLinks, isGroup, postHref } from '../../data/blog';
 
@@ -21,7 +21,8 @@ const recent = group
   : rest.slice(0, 3);
 const library = rest.slice(0, 9);
 const explore = exploreLinks(brand);
-const [leadMaterial, ...moreMaterials] = materials;
+const [leadMaterial, ...others] = materials;
+const moreMaterials = others.slice(0, 2);
 const ctaLabel = (tag: string) => (tag === 'Infográfico' ? 'Ver infográfico' : 'Baixar e-book');
 // Índice: no Grupo, uma linha por marca; na marca, uma linha por categoria.
 const themes = group
@@ -96,7 +97,7 @@ const themes = group
 
   <section class="ed-mats" id="materiais">
     <div class="wrap ed-mats__spread">
-      <a class="ed-mats__feature reveal" href="#">
+      <a class="ed-mats__feature reveal" href={materialHref(brand.base, leadMaterial)}>
         <div class="media"><img src={leadMaterial.image} alt="" loading="lazy" /></div>
         <div class="ed-mats__meta"><TypeBadge type={leadMaterial.tag} /><i></i>Material gratuito</div>
         <h3>{leadMaterial.title}</h3>
@@ -112,7 +113,7 @@ const themes = group
         <ol class="ed-mats__toc">
           {moreMaterials.map((m, i) => (
             <li class="reveal" style={`--d:${(i + 1) * 0.08}s`}>
-              <a href="#">
+              <a href={materialHref(brand.base, m)}>
                 <span class="ed-mats__n">{String(i + 2).padStart(2, '0')}</span>
                 <span>
                   <TypeBadge type={m.tag} />
@@ -124,7 +125,7 @@ const themes = group
             </li>
           ))}
         </ol>
-        <a class="link-more reveal" href="#">Ver todos os materiais <Icon name="arrow" size={16} /></a>
+        <a class="link-more reveal" href={materialHref(brand.base)}>Ver todos os materiais <Icon name="arrow" size={16} /></a>
       </div>
     </div>
   </section>

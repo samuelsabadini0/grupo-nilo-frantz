@@ -17,7 +17,14 @@ const groups = [
       { label: 'IFE', href: '/ife/' },
     ],
   },
-  { label: 'Exemplos', links: [{ label: 'Página de post', href: `/nilo-frantz/${POST_SLUG}/` }] },
+  {
+    label: 'Exemplos',
+    links: [
+      { label: 'Post', href: `/nilo-frantz/${POST_SLUG}/` },
+      { label: 'Materiais', href: '/nilo-frantz/materiais/' },
+      { label: 'Download', href: '/nilo-frantz/materiais/tratamentos-lgbtqiapn/' },
+    ],
+  },
 ];
 const isCurrent = (href: string) => (href === '/' ? path === '/' : path === href);
 ---

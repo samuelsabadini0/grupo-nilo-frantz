@@ -188,6 +188,39 @@ $$<HTMLFormElement>('[data-newsletter]').forEach((form) => {
   });
 });
 
+// Catálogo de materiais: filtro por tipo (E-book / Infográfico)
+$$('[data-mat-filter]').forEach((group) => {
+  const scope = group.closest('[data-ed-list]')!;
+  const buttons = $$<HTMLButtonElement>('button', group);
+  const cards = $$('[data-type]', scope);
+  const empty = scope.querySelector<HTMLElement>('[data-ed-empty]');
+  buttons.forEach((b) => b.addEventListener('click', () => {
+    const type = b.dataset.filter;
+    buttons.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+    cards.forEach((c) => {
+      c.toggleAttribute('data-off', !!type && c.dataset.type !== type);
+      c.classList.add('is-in');
+    });
+    if (empty) empty.hidden = cards.some((c) => !c.hidden && !c.hasAttribute('data-off'));
+  }));
+});
+
+// Download de material: template, sem envio real; mostra a confirmação e o botão de baixar
+$$<HTMLFormElement>('[data-download]').forEach((form) => {
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const card = form.parentElement!;
+    const ok = card.querySelector<HTMLElement>('[data-download-ok]')!;
+    const name = String(new FormData(form).get('nome') ?? '').trim().split(' ')[0];
+    const slot = ok.querySelector('[data-download-name]');
+    if (slot && name) slot.textContent = `, ${name}`;
+    form.hidden = true;
+    card.querySelectorAll(':scope > p, :scope > h3').forEach((el) => ((el as HTMLElement).hidden = true));
+    ok.hidden = false;
+    ok.setAttribute('role', 'status');
+  });
+});
+
 // Links de exemplo ainda sem destino não devem pular a página para o topo
 document.addEventListener('click', (e) => {
   const a = (e.target as Element).closest?.('a[href="#"]');

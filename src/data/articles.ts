@@ -74,8 +74,55 @@ export const articles: Article[] = stamp([
 export const articlesOf = (brand?: Article['brand']) => (brand ? articles.filter((x) => x.brand === brand) : articles);
 
 // Títulos do Figma; descrições provisórias.
-export const materials = [
-  { tag: 'E-book', title: 'Tratamentos LGBTQIAPN+', image: '/img/pes-maos.webp', description: 'Um guia sobre os caminhos possíveis para formar família, do planejamento ao tratamento.' },
-  { tag: 'E-book', title: 'Análise genética e biópsia embrionária: tudo o que você precisa saber', image: '/img/dna.webp', description: 'O que são os testes genéticos em embriões, quando são indicados e o que os resultados significam.' },
-  { tag: 'Infográfico', title: 'Análise genética e biópsia embrionária em uma página', image: '/img/laboratorio.webp', description: 'Os pontos principais sobre análise genética, resumidos para consulta rápida.' },
+export interface Material {
+  slug: string;
+  tag: 'E-book' | 'Infográfico';
+  title: string;
+  image: string;
+  description: string;
+  /** "O que você vai encontrar" na página de download */
+  topics: string[];
+  format: string;
+}
+
+// Os três primeiros vêm do Figma; os demais são exemplos para o catálogo. Descrições e tópicos são provisórios.
+export const materials: Material[] = [
+  {
+    slug: 'tratamentos-lgbtqiapn', tag: 'E-book', title: 'Tratamentos LGBTQIAPN+', image: '/img/pes-maos.webp',
+    description: 'Um guia sobre os caminhos possíveis para formar família, do planejamento ao tratamento.',
+    topics: ['Os caminhos possíveis para formar família', 'Como funciona cada etapa do tratamento', 'O que diz a legislação brasileira', 'Como escolher uma clínica acolhedora'],
+    format: 'PDF',
+  },
+  {
+    slug: 'analise-genetica-biopsia-embrionaria', tag: 'E-book', title: 'Análise genética e biópsia embrionária: tudo o que você precisa saber', image: '/img/dna.webp',
+    description: 'O que são os testes genéticos em embriões, quando são indicados e o que os resultados significam.',
+    topics: ['O que é o teste genético pré-implantacional', 'Em quais casos ele é indicado', 'Como a biópsia embrionária é feita', 'Como interpretar os resultados'],
+    format: 'PDF',
+  },
+  {
+    slug: 'analise-genetica-em-uma-pagina', tag: 'Infográfico', title: 'Análise genética e biópsia embrionária em uma página', image: '/img/laboratorio.webp',
+    description: 'Os pontos principais sobre análise genética, resumidos para consulta rápida.',
+    topics: ['As etapas da análise, do laboratório ao resultado', 'As indicações mais comuns', 'Respostas para as dúvidas frequentes'],
+    format: 'PDF, uma página',
+  },
+  {
+    slug: 'guia-fertilizacao-in-vitro', tag: 'E-book', title: 'Guia da fertilização in vitro: do primeiro exame à transferência', image: '/img/embriao-destaque.webp',
+    description: 'Cada etapa da FIV explicada em linguagem simples, para chegar à consulta com menos dúvidas.',
+    topics: ['Os exames do início do tratamento', 'A estimulação ovariana e a coleta', 'O que acontece no laboratório', 'A transferência e a espera pelo resultado'],
+    format: 'PDF',
+  },
+  {
+    slug: 'preservacao-da-fertilidade', tag: 'E-book', title: 'Preservação da fertilidade: quando e como fazer', image: '/img/gestante-sentada.webp',
+    description: 'Para quem quer adiar a gestação ou vai passar por um tratamento que pode afetar a fertilidade.',
+    topics: ['Quem pode se beneficiar', 'Congelamento de óvulos e de embriões', 'O melhor momento para preservar', 'Cuidados antes e depois do procedimento'],
+    format: 'PDF',
+  },
+  {
+    slug: 'ovodoacao-em-etapas', tag: 'Infográfico', title: 'Ovodoação em etapas', image: '/img/bebe-dormindo.webp',
+    description: 'O caminho da ovodoação resumido do início ao fim, para consultar quando precisar.',
+    topics: ['Como é escolhida a doadora', 'A sincronização entre doadora e receptora', 'Da fertilização à transferência'],
+    format: 'PDF, uma página',
+  },
 ];
+
+export const materialHref = (base: string, m?: Material) => `${base}materiais/${m ? `${m.slug}/` : ''}`;

@@ -21,6 +21,8 @@ const { title, brand, description = 'Medicina reprodutiva e fertilidade.', pageB
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    <link rel="icon" href={brand.favicon.src} type={brand.favicon.src.endsWith('.svg') ? 'image/svg+xml' : 'image/png'} />
+    <link rel="apple-touch-icon" href={brand.favicon.touch} />
     <script is:inline>document.documentElement.classList.add('js')</script>
   </head>
   <body style={`${themeStyle(brand)}${pageBg ? `;background:${pageBg}` : ''}`}>

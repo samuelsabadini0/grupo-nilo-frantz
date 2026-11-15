@@ -1,0 +1,44 @@
+---
+// Catálogo de materiais ricos de um blog
+import Editorial from '../../layouts/Editorial.astro';
+import MaterialCard from './MaterialCard.astro';
+import Sidebar from './Sidebar.astro';
+import { materials } from '../../data/articles';
+import type { Brand } from '../../data/brands';
+
+interface Props { brand: Brand }
+const { brand } = Astro.props;
+const types = ['E-book', 'Infográfico'] as const;
+const count = (t: string) => materials.filter((m) => m.tag === t).length;
+---
+<Editorial brand={brand} title={`Materiais | ${brand.blogTitle}`} heroSrc={brand.hero.src} description="E-books e infográficos gratuitos sobre reprodução assistida.">
+  <section class="ed-hero ed-hero--page ed-hero--art">
+    <img class="ed-hero__img" src={brand.hero.src} alt="" fetchpriority="high" />
+    <div class="ed-hero__in">
+      <div class="ed-crumbs"><a href={brand.base}>Blog</a><span>/</span><span>Materiais</span></div>
+      <p class="ed-eyebrow ed-eyebrow--light">Materiais gratuitos</p>
+      <h1>Materiais</h1>
+      <p class="ed-hero__lead">E-books e infográficos sobre tratamentos, exames e reprodução assistida, para ler com calma e voltar quando precisar.</p>
+    </div>
+  </section>
+
+  <section class="wrap ed-section ed-withside" data-ed-list style="margin-top:96px">
+    <div>
+      <div class="ed-section__head">
+        <div>
+          <p class="ed-eyebrow">{materials.length} materiais</p>
+          <h2 class="ed-title">Biblioteca de materiais</h2>
+        </div>
+        <div class="ed-filter" role="group" aria-label="Filtrar por tipo" data-mat-filter>
+          <button type="button" data-filter="" aria-pressed="true">Todos <span>{materials.length}</span></button>
+          {types.map((t) => <button type="button" data-filter={t} aria-pressed="false">{t === 'E-book' ? 'E-books' : 'Infográficos'} <span>{count(t)}</span></button>)}
+        </div>
+      </div>
+      <div class="ed-grid ed-grid--2">
+        {materials.map((m, i) => <MaterialCard material={m} base={brand.base} delay={(i % 2) * 0.08} />)}
+      </div>
+      <p class="ed-empty" data-ed-empty hidden>Nenhum material encontrado para essa busca.</p>
+    </div>
+    <aside><Sidebar brand={brand} /></aside>
+  </section>
+</Editorial>

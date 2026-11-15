@@ -1,0 +1,17 @@
+---
+import Icon from '../Icon.astro';
+import TypeBadge from './TypeBadge.astro';
+import { materialHref, type Material } from '../../data/articles';
+interface Props { material: Material; base: string; delay?: number }
+const { material, base, delay = 0 } = Astro.props;
+const cta = material.tag === 'Infográfico' ? 'Ver infográfico' : 'Baixar e-book';
+---
+<article class="ed-card ed-matcard reveal" data-ed-card data-type={material.tag} style={`--d:${delay}s`}>
+  <a href={materialHref(base, material)}>
+    <div class="media"><img src={material.image} alt="" loading="lazy" /></div>
+    <TypeBadge type={material.tag} />
+    <h3>{material.title}</h3>
+    <p>{material.description}</p>
+    <span class="ed-card__more">{cta} <Icon name="chevron" size={14} /></span>
+  </a>
+</article>

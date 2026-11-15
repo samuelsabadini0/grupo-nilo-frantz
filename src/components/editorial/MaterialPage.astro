@@ -1,0 +1,70 @@
+---
+// Página de download de um material rico (template: o formulário ainda não envia para nenhum sistema)
+import Editorial from '../../layouts/Editorial.astro';
+import Icon from '../Icon.astro';
+import MaterialCard from './MaterialCard.astro';
+import TypeBadge from './TypeBadge.astro';
+import { materialHref, materials, type Material } from '../../data/articles';
+import type { Brand } from '../../data/brands';
+
+interface Props { brand: Brand; material: Material }
+const { brand, material } = Astro.props;
+const isEbook = material.tag === 'E-book';
+const cta = isEbook ? 'Baixar e-book' : 'Baixar infográfico';
+const others = materials.filter((m) => m !== material).slice(0, 3);
+---
+<Editorial brand={brand} title={`${material.title} | ${brand.blogTitle}`} heroSrc={brand.hero.src} description={material.description}>
+  <section class="ed-hero ed-hero--page ed-hero--art ed-hero--material">
+    <img class="ed-hero__img" src={brand.hero.src} alt="" fetchpriority="high" />
+    <div class="ed-hero__in">
+      <div class="ed-crumbs"><a href={brand.base}>Blog</a><span>/</span><a href={materialHref(brand.base)}>Materiais</a><span>/</span><span>{material.tag}</span></div>
+      <TypeBadge type={material.tag} />
+      <h1>{material.title}</h1>
+      <h2 class="ed-hero__sub">{material.description}</h2>
+    </div>
+  </section>
+
+  <div class="wrap ed-dl">
+    <div class="ed-dl__info">
+      <div class="media ed-dl__cover"><img src={material.image} alt="" /></div>
+      <h2 class="ed-title">O que você vai encontrar</h2>
+      <ul class="ed-dl__topics">
+        {material.topics.map((t) => <li><span><Icon name="check" size={16} /></span>{t}</li>)}
+      </ul>
+      <dl class="ed-dl__facts">
+        <div><dt>Tipo</dt><dd>{material.tag}</dd></div>
+        <div><dt>Formato</dt><dd>{material.format}</dd></div>
+        <div><dt>Acesso</dt><dd>Gratuito</dd></div>
+      </dl>
+    </div>
+
+    <div class="ed-dl__side">
+      <div class="ed-dl__card" id="baixar">
+        <p class="ed-side__eyebrow">Material gratuito</p>
+        <h3>Preencha para baixar</h3>
+        <p>Enviamos o {isEbook ? 'e-book' : 'infográfico'} para o seu e-mail e você também pode baixar na hora.</p>
+        <form data-download>
+          <label>Nome<input type="text" name="nome" autocomplete="name" required /></label>
+          <label>E-mail<input type="email" name="email" autocomplete="email" required /></label>
+          <label><span>Telefone <small>(opcional)</small></span><input type="tel" name="telefone" autocomplete="tel" /></label>
+          <label class="ed-dl__consent"><input type="checkbox" name="consentimento" required /> <span>Concordo em receber comunicações e com a <a href="#">Política de Privacidade</a>.</span></label>
+          <button type="submit"><Icon name="download" size={18} />{cta}</button>
+        </form>
+        <div class="ed-dl__ok" data-download-ok hidden>
+          <span class="ed-dl__ok-icon"><Icon name="check" size={22} /></span>
+          <h3>Tudo certo<span data-download-name></span>!</h3>
+          <p>Enviamos o material para o seu e-mail. Se preferir, baixe agora.</p>
+          <a class="btn" href="#"><Icon name="download" size={18} />{cta}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="wrap ed-section">
+    <p class="ed-eyebrow reveal">Continue aprendendo</p>
+    <h2 class="ed-title reveal">Outros materiais</h2>
+    <div class="ed-grid">
+      {others.map((m, i) => <MaterialCard material={m} base={brand.base} delay={i * 0.08} />)}
+    </div>
+  </section>
+</Editorial>
